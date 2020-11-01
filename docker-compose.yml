@@ -1,0 +1,11 @@
+test:
+    image: newser_server
+    container_name: server_newser
+    restart: always
+    volumes:
+        - "/srv/logs/newser_server:/usr/src/app/data/logs"
+    ports:
+        - "3000:3000"
+    environment:
+        - SERVER_HOST=localhost
+        - SERVER_PORT=3000

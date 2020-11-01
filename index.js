@@ -13,6 +13,7 @@ import api from './api'
 import socketManager from './socket'
 
 // App setup
+const HOST = process.env.SERVER_HOST
 const PORT = process.env.SERVER_PORT;
 
 const app = express();
@@ -23,21 +24,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.raw());
 app.use('/api', api)
 
-const server = app.listen(5000, () => {
-    console.log('Listening on port 3000')
+const server = app.listen(PORT, HOST, () => {
+    console.log(`Сервер запущен по адресу http://${HOST}:${PORT}`)
 })
 
 socketManager(server)
 
-// Static files
+// Frontend
 app.use(express.static("public"));
 app.use('/static', express.static(path.join(path.resolve(), 'public')))
 
-// Frontend
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(`${path.resolve()}/public/`));
-
-    app.get(/.*/, (_, res) => {
-        res.sendFile(`${path.resolve()}/public/index.html`);
-    })
-}
+app.get(/.*/, (_, res) => {
+    res.sendFile(`${path.resolve()}/public/index.html`);
+})
