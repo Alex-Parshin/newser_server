@@ -7,7 +7,7 @@ export function log(data, member = 'Сервер') {
 
     console.log(logString)
 
-    const filePath = `${ appRoot }/data/logs/newser_server.txt`
+    const filePath = `${ appRoot }/logs/newser_server.txt`
     try {
         if (!fs.existsSync(filePath)) {
             fs.open(filePath, 'w', (err) => {

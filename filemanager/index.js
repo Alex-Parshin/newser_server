@@ -44,13 +44,13 @@ export function checkQueueFile() {
             fs.open(`${filePath}/queries.json`, 'w', (err) => {
                 if (err) throw err;
                 fs.writeFileSync(`${filePath}/queries.json`, '[]');
-                console.log('Создан файл запросов!');
+                log('Создан файл запросов!');
             });
         } else {
-            console.log('Файл запросов уже существует!')
+            log('Файл запросов уже существует!')
         }
     } catch (err) {
-        console.log(err)
+        log(err)
     }
 }
 

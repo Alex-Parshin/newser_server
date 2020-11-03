@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start:dev": "nodemon --experimental-modules --experimental-json-modules --es-module-specifier-resolution=node ."
+        "start:dev": "node --experimental-modules --experimental-json-modules --es-module-specifier-resolution=node ."
     },
     "keywords": [],
     "author": "",

@@ -11,7 +11,7 @@ import { PGConnect } from './controllers/postgres'
 import { checkQueueFile } from './controllers/query'
 import apiHandler from './controllers/api'
 import socketHandler from './controllers/socket'
-
+import { log } from './logger'
 const app = express()
 
 app.use(cors())
@@ -22,10 +22,9 @@ app.use(bodyParser.raw());
 app.use('/api', apiHandler)
 
 const port = process.env.SERVER_PORT
-const host = process.env.SERVER_HOST
 
-const server = app.listen(port, host, () => {
-    console.log(`Сервер запущен на http://${host}:${port}`)
+const server = app.listen(port, () => {
+    log(`Сервер запущен на http://localhost:${port}`)
 })
 
 state.setCli(cli)
