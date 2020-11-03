@@ -13,11 +13,10 @@ export default function socketManager() {
 
             connections.push({
                 socket: socket,
-                name: data
+                name: setMemberName(data)
             })
 
-            let member = 'Сервер'
-            log('подключился!', member)
+            log(`${setMemberName(data)} подключился!`)
             socket.emit('startBot', { source: 'server', server: 'server', pages: 1, url: process.env.QUERY_URL, engines: { 7: true, 3: true, 4: true } })
         })
 
@@ -37,7 +36,7 @@ export default function socketManager() {
 
         socket.on('disconnect', () => {
             let member = getMemberViaSocket(socket).name
-            log('отключился', member)
+            log(`${member} отключился!`)
         })
     })
 }
@@ -48,4 +47,15 @@ function getMemberViaName(memberName) {
 
 function getMemberViaSocket(memberSocket) {
     return connections.find(member => member.socket === memberSocket)
+}
+
+function setMemberName(name) {
+    let counter = 0
+    if (connections.find(member => member.name === name)) {
+        if (name.split('_')[1]) {
+            counter = Number(name.split('_')[2])
+        }
+        counter += 1
+    }
+    return `${name}_${counter}`.toString()
 }
