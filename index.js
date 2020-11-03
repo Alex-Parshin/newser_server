@@ -1,39 +1,40 @@
-'use strict'
-
-// NPM modules
 import express from 'express'
-import path from 'path'
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import cli from 'cli-color'
+import path from 'path'
 import dotenv from 'dotenv'
 dotenv.config()
 
-// Custom modules
-import api from './api'
-import socketManager from './socket'
+import state from './state'
+import { PGConnect } from './controllers/postgres'
+import { checkQueueFile } from './controllers/query'
+import apiHandler from './controllers/api'
+import socketHandler from './controllers/socket'
 
-// App setup
-const HOST = process.env.SERVER_HOST
-const PORT = process.env.SERVER_PORT;
-
-const app = express();
+const app = express()
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
-app.use('/api', api)
 
-const server = app.listen(PORT, HOST, () => {
-    console.log(`Сервер запущен по адресу http://${HOST}:${PORT}`)
+app.use('/api', apiHandler)
+
+const port = process.env.SERVER_PORT
+const host = process.env.SERVER_HOST
+
+const server = app.listen(port, host, () => {
+    console.log(`Сервер запущен на http://${host}:${port}`)
 })
 
-socketManager(server)
+state.setCli(cli)
+state.setServer(server)
+socketHandler()
+state.setDB(await PGConnect())
+checkQueueFile()
 
-// Frontend
-app.use(express.static("public"));
-app.use('/static', express.static(path.join(path.resolve(), 'public')))
-
+app.use(express.static(`${path.resolve()}/public/`));
 app.get(/.*/, (_, res) => {
     res.sendFile(`${path.resolve()}/public/index.html`);
 })
