@@ -17,18 +17,14 @@ export default function socketManager() {
                 name: new_name
             })
 
-            updateClients()
+            io.emit('update_clients', clients)
             log(`${new_name} подключился!`)
         })
 
         socket.on('log', (data) => {
             let member = getMemberViaSocket(socket).name
             log(data, member)
-
-            if (getMemberViaName('newser_client_0')) {
-                const memberSocket = getMemberViaName('newser_client_0').socket
-                memberSocket.emit('log', { member, data })
-            }
+            io.emit('log', { member, data })
         })
 
         socket.on('start', (member) => {
@@ -62,10 +58,11 @@ export default function socketManager() {
         socket.on('disconnect', () => {
             let member = getMemberViaSocket(socket).name
             clients = clients.filter(client => client !== member)
-            updateClients()
+            io.emit('update_clients', clients)
             connections = connections.filter(member => member.socket !== socket)
             log(`${member} отключился!`)
         })
+
     })
 }
 
@@ -91,11 +88,4 @@ function setMemberName(name) {
     }
 
     return `${name}_${counter}`.toString()
-}
-
-function updateClients() {
-    if (getMemberViaName('newser_client_0')) {
-        const memberSocket = getMemberViaName('newser_client_0').socket
-        memberSocket.emit('update_clients', clients)
-    }
 }
