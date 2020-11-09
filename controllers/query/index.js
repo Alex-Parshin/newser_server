@@ -54,20 +54,3 @@ export async function addQueryToQueue({ query, id_request, engine }) {
     fs.writeFileSync(`${filePath}/${process.env.QUEUE_FILE}.json`, JSON.stringify(data))
     return 0
 }
-
-export function checkQueueFile() {
-    let filePath = `${appRoot}/data`
-    try {
-        if (!fs.existsSync(`${filePath}/${process.env.QUEUE_FILE}.json`)) {
-            fs.open(`${filePath}/queries.json`, 'w', (err) => {
-                if (err) throw err;
-                fs.writeFileSync(`${filePath}/queries.json`, '[]');
-                console.log('Создан файл запросов!');
-            });
-        } else {
-            console.log('Файл запросов уже существует!')
-        }
-    } catch (err) {
-        console.log(err)
-    }
-}

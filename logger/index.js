@@ -1,5 +1,3 @@
-import fs from 'fs'
-import appRoot from 'app-root-path'
 import { addDataToLogs } from './../filemanager/index'
 
 export function log(data, member = 'Сервер') {

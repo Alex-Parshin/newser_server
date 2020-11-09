@@ -7,6 +7,7 @@ let connections = []
 export default function socketManager() {
     const io = socket(store.getServer())
     io.on('connect', socket => {
+
         socket.on('who_am_i', (data) => {
             let new_name = setMemberName(data)
 
@@ -35,8 +36,8 @@ export default function socketManager() {
 
         socket.on('disconnect', () => {
             let member = getMemberViaSocket(socket).name
-            connections = connections.filter(member => member.socket !== socket)
             updateClients()
+            connections = connections.filter(member => member.socket !== socket)
             log(`${member} отключился!`)
         })
     })
@@ -63,6 +64,8 @@ function setMemberName(name) {
 }
 
 function updateClients() {
-    const memberSocket = getMemberViaName('newser_client_0').socket
-    memberSocket.emit('update_clients', connections.map(member => member.name))
+    if (getMemberViaName('newser_client_0')) {
+        const memberSocket = getMemberViaName('newser_client_0').socket
+        memberSocket.emit('update_clients', connections.map(member => member.name))
+    }
 }

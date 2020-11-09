@@ -8,10 +8,12 @@ dotenv.config()
 
 import state from './state'
 import { PGConnect } from './controllers/postgres'
-import { checkQueueFile } from './controllers/query'
+import { checkQueueFile } from './filemanager'
 import apiHandler from './controllers/api'
 import socketHandler from './controllers/socket'
+
 import { log } from './logger'
+
 const app = express()
 
 app.use(cors())

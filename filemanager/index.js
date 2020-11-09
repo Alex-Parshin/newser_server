@@ -38,7 +38,7 @@ export function getQueryFromFile() {
 }
 
 export function checkQueueFile() {
-    let filePath = `${appRoot}/lib/data`
+    let filePath = `${appRoot}/data`
     try {
         if (!fs.existsSync(`${filePath}/${process.env.QUEUE_FILE}.json`)) {
             fs.open(`${filePath}/queries.json`, 'w', (err) => {
