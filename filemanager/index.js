@@ -78,3 +78,17 @@ export function addQueryToQueue({ query, id_request, engine }) {
     fs.writeFileSync(`${filePath}/${process.env.QUEUE_FILE}.json`, JSON.stringify(data))
     return 0
 }
+
+export function addDataToLogs(logString) {
+    const filePath = `${ appRoot }/logs/newser_server.txt`
+    try {
+        if (!fs.existsSync(filePath)) {
+            fs.open(filePath, 'w', (err) => {
+                if (err) throw err;
+            });
+        }
+        fs.appendFileSync(filePath, logString + '\n');
+    } catch (err) {
+        console.log(err)
+    }
+}
