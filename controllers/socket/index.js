@@ -3,6 +3,7 @@ import socket from 'socket.io'
 import { log } from './../../logger'
 
 let connections = []
+let clients = []
 
 export default function socketManager() {
     const io = socket(store.getServer())
@@ -15,6 +16,7 @@ export default function socketManager() {
                 socket: socket,
                 name: new_name
             })
+
             updateClients()
             log(`${new_name} подключился!`)
         })
@@ -22,20 +24,44 @@ export default function socketManager() {
         socket.on('log', (data) => {
             let member = getMemberViaSocket(socket).name
             log(data, member)
+
+            if (getMemberViaName('newser_client_0')) {
+                const memberSocket = getMemberViaName('newser_client_0').socket
+                memberSocket.emit('log', { member, data })
+            }
         })
 
-        socket.on('start', (memberName, { source, pages, url, engines }) => {
+        socket.on('start', (member) => {
+
+            let memberName = member.name
+
+            let source = process.env.SERVER_SOURCE
+            let pages = process.env.DEFAULT_PAGES
+            let url = process.env.QUERY_URL
+            let engines = {
+                3: true,
+                7: true
+            }
+
             const memberSocket = getMemberViaName(memberName).socket
-            memberSocket.emit('startBot', { source, pages, url, engines })
+            memberSocket.emit('start', { source, pages, url, engines })
         })
 
-        socket.on('stop', memberName => {
+        socket.on('restart', member => {
+            let memberName = member.name
             const memberSocket = getMemberViaName(memberName).socket
-            memberSocket.emit('stopBot')
+            memberSocket.emit('restart')
+        })
+
+        socket.on('stop', member => {
+            let memberName = member.name
+            const memberSocket = getMemberViaName(memberName).socket
+            memberSocket.emit('stop')
         })
 
         socket.on('disconnect', () => {
             let member = getMemberViaSocket(socket).name
+            clients = clients.filter(client => client !== member)
             updateClients()
             connections = connections.filter(member => member.socket !== socket)
             log(`${member} отключился!`)
@@ -60,12 +86,16 @@ function setMemberName(name) {
             name = name.split('_').splice(0, 2).join('_')
         }
     }
+    if (name.split('_')[1] !== 'client') {
+        clients.push(`${name}_${counter}`)
+    }
+
     return `${name}_${counter}`.toString()
 }
 
 function updateClients() {
     if (getMemberViaName('newser_client_0')) {
         const memberSocket = getMemberViaName('newser_client_0').socket
-        memberSocket.emit('update_clients', connections.map(member => member.name))
+        memberSocket.emit('update_clients', clients)
     }
 }
