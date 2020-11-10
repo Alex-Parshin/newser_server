@@ -27,17 +27,30 @@ export default function socketManager() {
             io.emit('log', { member, data })
         })
 
-        socket.on('start', (member) => {
+        socket.on('start', (member, { source, pages, engines }) => {
 
             let memberName = member.name
-
-            let source = process.env.SERVER_SOURCE
-            let pages = process.env.DEFAULT_PAGES
             let url = process.env.QUERY_URL
-            let engines = {
-                3: true,
-                7: true
+
+            switch (source) {
+                case 'Удаленный сервер':
+                    source = 'server'
+                    break
             }
+
+            let enginesToBot = {
+                3: false,
+                4: false,
+                7: false
+            }
+
+            for (let i = 0; i < engines.length; i++) {
+                if (engines[0] === true) enginesToBot[3] = true
+                if (engines[1] === true) enginesToBot[4] = true
+                if (engines[2] === true) enginesToBot[7] = true
+            }
+
+            engines = enginesToBot
 
             const memberSocket = getMemberViaName(memberName).socket
             memberSocket.emit('start', { source, pages, url, engines })

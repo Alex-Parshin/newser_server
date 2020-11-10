@@ -56,11 +56,25 @@ router.get('/getMercurySelectors/:domain', async(req, res) => {
 })
 
 router.post('/sendMercurySelectors', (req, res) => {
+
+    /* Отработать ошибку большого количества новостей*/
+
     const result = sendMercurySelectors(req.body.data)
     if (result.status) res.status(200).end(`Селекторы для домена ${req.body.data.domain} успешно записаны в базу`)
     else res.status(201).end(`Ошибка записи селекторов: ${ressult.error}`)
 })
 
-/***************************/
+/*****Client area*********/
+
+router.get('/getEngines', (req, res) => {
+
+    const engines = [
+        'Google.News',
+        'Yandex.News',
+        'Rambler.News'
+    ]
+
+    res.send(engines)
+})
 
 export default router

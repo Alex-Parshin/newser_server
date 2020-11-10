@@ -32,6 +32,7 @@ export async function getData(queue) {
 
 export async function sendData(queue, data) {
     let status = null
+    console.log(data)
     try {
         status = await new Promise(async(resolve, reject) => {
             amqp.connect(`amqp://${process.env.RABBIT_USER}:${process.env.RABBIT_PASSWORD}@${process.env.RABBIT_HOST}:${process.env.RABBIT_PORT}`,
