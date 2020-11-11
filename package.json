@@ -23,7 +23,8 @@
         "express": "^4.17.1",
         "path": "^0.12.7",
         "pg-promise": "^10.7.1",
-        "socket.io": "^2.3.0"
+        "socket.io": "^2.3.0",
+        "underscore": "^1.11.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.6"

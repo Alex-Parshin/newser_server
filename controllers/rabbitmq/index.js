@@ -1,5 +1,6 @@
 import * as amqp from 'amqplib/callback_api'
 import { log } from './../../logger'
+import _ from 'underscore'
 
 export async function getData(queue) {
     let data = null
@@ -32,7 +33,12 @@ export async function getData(queue) {
 
 export async function sendData(queue, data) {
     let status = null
-    console.log(data)
+    let sliced_array = []
+
+    if (data.length > 50) {
+        sliced_array = _.chunk(data, 50);
+    }
+
     try {
         status = await new Promise(async(resolve, reject) => {
             amqp.connect(`amqp://${process.env.RABBIT_USER}:${process.env.RABBIT_PASSWORD}@${process.env.RABBIT_HOST}:${process.env.RABBIT_PORT}`,
@@ -51,12 +57,16 @@ export async function sendData(queue, data) {
                             durable: true
                         });
                         channel.prefetch(1);
-                        channel.sendToQueue(queue,
-                            Buffer.from(JSON.stringify(data)), {
-                                headers: {
-                                    time: new Date(Date.now()).toLocaleString()
-                                }
-                            });
+
+                        for (let i = 0; i < sliced_array.length; i++) {
+                            log('Отправляю порции данных')
+                            channel.sendToQueue(queue,
+                                Buffer.from(JSON.stringify(sliced_array[i])), {
+                                    headers: {
+                                        time: new Date(Date.now()).toLocaleString()
+                                    }
+                                });
+                        }
                         log('Отправил данные ')
                         resolve(true);
                     });
