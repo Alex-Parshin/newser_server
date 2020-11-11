@@ -26,6 +26,12 @@ router.get('/getConfig', (req, res) => {
     res.json(config)
 })
 
+router.post('/setConfig', (req, res) => {
+    let config = req.body.config
+    if (setConfig(config)) res.send('Success')
+    else res.send('Error')
+})
+
 /** RabbitMQ API Section */
 router.get('/getDataFromRabbitMQ/:queue', async(req, res) => {
     const queue = req.params.queue

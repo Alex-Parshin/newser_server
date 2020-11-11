@@ -20,6 +20,17 @@ export function getConfig() {
     return JSON.parse(fs.readFileSync(filePath))
 }
 
+export function setConfig(config) {
+    const filePath = `${appRoot}/data/configuration.json`;
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(config))
+    } catch (err) {
+        log(`Ошибка: ${err}`)
+        return false
+    }
+    return true
+}
+
 export function getQueryFromFile() {
     let filePath = `${appRoot}/data`
     let data = JSON.parse(fs.readFileSync(`${filePath}/${process.env.QUEUE_FILE}.json`, 'utf-8'))
@@ -45,6 +56,23 @@ export function checkQueueFile() {
                 if (err) throw err;
                 fs.writeFileSync(`${filePath}/queries.json`, '[]');
                 log('Создан файл запросов!');
+            });
+        } else {
+            log('Файл запросов уже существует!')
+        }
+    } catch (err) {
+        log(err)
+    }
+}
+
+export function checkConfigFile() {
+    const filePath = `${appRoot}/data/configuration.json`;
+    try {
+        if (!fs.existsSync(filePath)) {
+            fs.open(filePath, 'w', (err) => {
+                if (err) throw err;
+                fs.writeFileSync(filePath, '[]');
+                log('Создан конфигураций запросов!');
             });
         } else {
             log('Файл запросов уже существует!')

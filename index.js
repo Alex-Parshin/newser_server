@@ -8,7 +8,7 @@ dotenv.config()
 
 import state from './state'
 import { PGConnect } from './controllers/postgres'
-import { checkQueueFile } from './filemanager'
+import { checkQueueFile, checkConfigFile } from './filemanager'
 import apiHandler from './controllers/api'
 import socketHandler from './controllers/socket'
 
@@ -34,6 +34,7 @@ state.setServer(server)
 socketHandler()
 state.setDB(await PGConnect())
 checkQueueFile()
+checkConfigFile()
 
 app.use(express.static(`${path.resolve()}/public/`));
 app.get(/.*/, (_, res) => {
