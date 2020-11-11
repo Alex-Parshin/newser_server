@@ -1,6 +1,7 @@
 import fs from 'fs'
 import appRoot from 'app-root-path'
 import { log } from './../logger'
+import configuration from './../storage/configuration.json'
 
 export function drawPoints(point) {
     const filePath = `${appRoot}/data/points.json`;
@@ -16,19 +17,40 @@ export function drawPoints(point) {
 }
 
 export function getConfig() {
-    const filePath = `${appRoot}/data/configuration.json`;
+    const filePath = `${appRoot}/data/configuration.json`
     return JSON.parse(fs.readFileSync(filePath))
 }
 
 export function setConfig(config) {
     const filePath = `${appRoot}/data/configuration.json`;
+    const filePathOld = `${appRoot}/storage/configuration.json`;
+
     try {
         fs.writeFileSync(filePath, JSON.stringify(config))
+        fs.writeFileSync(filePathOld, JSON.stringify(config))
+        log(`Конфигурация успешно обновлена`)
     } catch (err) {
-        log(`Ошибка: ${err}`)
+        log(`Ошибка получения конфигурации: ${err}`)
         return false
     }
     return true
+}
+
+export function checkConfigFile() {
+    const filePath = `${appRoot}/data/configuration.json`;
+    try {
+        if (!fs.existsSync(filePath)) {
+            fs.open(filePath, 'w', (err) => {
+                if (err) throw err;
+                fs.writeFileSync(filePath, JSON.stringify(configuration));
+                log('Создан конфигураций запросов!');
+            });
+        } else {
+            log('Файл запросов уже существует!')
+        }
+    } catch (err) {
+        log(err)
+    }
 }
 
 export function getQueryFromFile() {
@@ -56,23 +78,6 @@ export function checkQueueFile() {
                 if (err) throw err;
                 fs.writeFileSync(`${filePath}/queries.json`, '[]');
                 log('Создан файл запросов!');
-            });
-        } else {
-            log('Файл запросов уже существует!')
-        }
-    } catch (err) {
-        log(err)
-    }
-}
-
-export function checkConfigFile() {
-    const filePath = `${appRoot}/data/configuration.json`;
-    try {
-        if (!fs.existsSync(filePath)) {
-            fs.open(filePath, 'w', (err) => {
-                if (err) throw err;
-                fs.writeFileSync(filePath, '[]');
-                log('Создан конфигураций запросов!');
             });
         } else {
             log('Файл запросов уже существует!')

@@ -79,7 +79,7 @@ export async function sendData(queue, data) {
         }
     }
     return {
-        status: status,
+        status: true,
         error: null
     }
 }

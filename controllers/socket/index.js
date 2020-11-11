@@ -21,11 +21,11 @@ export default function socketManager() {
             log(`${new_name} подключился!`)
         })
 
-        socket.on('log', (text) => {
+        socket.on('log', ({ text, status }) => {
             let member = getMemberViaSocket(socket).name
             log(text, member)
             text = `${ new Date(Date.now()).toLocaleDateString() } ${new Date(Date.now()).toLocaleTimeString()} | ${text}`
-            io.emit('log', { member, text })
+            io.emit('log', { member, text, status })
         })
 
         socket.on('start', (member, { source, pages, engines }) => {
@@ -57,8 +57,13 @@ export default function socketManager() {
             memberSocket.emit('start', { source, pages, url, engines })
         })
 
-        socket.on('setStatus', (member, status) => {
-            io.emit('getStatus', { member, status })
+        socket.on('getStatus', () => {
+            io.emit('getStatusToBot')
+        })
+
+        socket.on('setStatus', (status) => {
+            const member = getMemberViaSocket(socket).name
+            io.emit('getStatusToClient', { member, status })
         })
 
         socket.on('restart', member => {

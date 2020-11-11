@@ -3,7 +3,7 @@ import express from 'express'
 import { getMercurySelectors, sendMercurySelectors } from './../postgres'
 import { getData, sendData } from './../rabbitmq'
 import { getQuery } from './../query'
-import { getConfig } from './../../filemanager'
+import { getConfig, setConfig } from './../../filemanager'
 import { log } from './../../logger'
 
 const router = express.Router()
@@ -41,10 +41,10 @@ router.get('/getDataFromRabbitMQ/:queue', async(req, res) => {
     else res.status(201).end(`Ошибка отправки данных в очередь ${queue}: ${result.error}`)
 })
 
-router.post('/sendDataToRabbitMQ', (req, res) => {
+router.post('/sendDataToRabbitMQ', async(req, res) => {
     const queue = req.body.queue
     const data = req.body.data
-    const result = sendData(queue, data)
+    const result = await sendData(queue, data)
     if (result.status) {
         res.status(200).end(`Данные успешно отправлены в очередь ${queue}`)
         log(`Данные успешно отправлены в очередь ${queue}`)
