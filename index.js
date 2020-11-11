@@ -23,6 +23,11 @@ app.use(bodyParser.raw());
 
 app.use('/api', apiHandler)
 
+app.get('/', (req, res) => {
+    log(`${req.headers['x-forwarded-for'] || req.connection.remoteAddress} подклчился`)
+    res.end()
+})
+
 const port = process.env.SERVER_PORT
 
 const server = app.listen(port, () => {
