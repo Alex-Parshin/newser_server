@@ -27824,3 +27824,7 @@ puppeteer_bot_0 | 11/12/2020 1:01:48 PM | Начинаю обработку по
 puppeteer_bot_0 | 11/12/2020 1:01:48 PM | Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36
 puppeteer_bot_0 | 11/12/2020 1:01:48 PM | https://news.google.com/rss/search?q=Вилючинск&hl=ru&gl=RU&ceid=RU:ru
 Сервер | 11/12/2020 1:01:49 PM | puppeteer_bot_0 отключился!
+Сервер | 11/12/2020 4:43:54 PM | Успешно подключился к ias_db
+Сервер | 11/12/2020 4:43:54 PM | Файл запросов уже существует!
+Сервер | 11/12/2020 4:43:54 PM | Файл запросов уже существует!
+Сервер | 11/12/2020 4:43:54 PM | Сервер запущен на http://localhost:5000
