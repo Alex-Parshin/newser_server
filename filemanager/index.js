@@ -1,7 +1,6 @@
 import fs from 'fs'
 import appRoot from 'app-root-path'
 import { log } from './../logger'
-import configuration from './../storage/configuration.json'
 
 export function drawPoints(point) {
     const filePath = `${appRoot}/data/points.json`;
@@ -23,11 +22,9 @@ export function getConfig() {
 
 export function setConfig(config) {
     const filePath = `${appRoot}/data/configuration.json`;
-    const filePathOld = `${appRoot}/storage/configuration.json`;
 
     try {
         fs.writeFileSync(filePath, JSON.stringify(config))
-        fs.writeFileSync(filePathOld, JSON.stringify(config))
         log(`Конфигурация успешно обновлена`)
     } catch (err) {
         log(`Ошибка получения конфигурации: ${err}`)
