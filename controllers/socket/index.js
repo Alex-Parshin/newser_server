@@ -80,7 +80,7 @@ export default function socketManager() {
 
         socket.on('disconnect', () => {
             let member = getMemberViaSocket(socket).name
-            clients = clients.filter(client => client !== member)
+            clients = clients.filter(client => client.name !== member)
             io.emit('update_clients', clients)
             connections = connections.filter(member => member.socket !== socket)
             log(`${member} отключился!`)
@@ -107,7 +107,10 @@ function setMemberName(name) {
         }
     }
     if (name.split('_')[1] !== 'client') {
-        clients.push(`${name}_${counter}`)
+        clients.push({
+            name: `${name}_${counter}`,
+            time: new Date(Date.now()).toLocaleDateString() + ' ' + new Date(Date.now()).toLocaleTimeString()
+        })
     }
 
     return `${name}_${counter}`.toString()
