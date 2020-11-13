@@ -1,3 +1,5 @@
+'use strict'
+
 import { localFileProvider, serverProvider } from './../../providers'
 import appRoot from 'app-root-path'
 import fs from 'fs'

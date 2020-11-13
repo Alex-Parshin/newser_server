@@ -1,3 +1,5 @@
+'use strict'
+
 import { addDataToLogs } from './../filemanager/index'
 
 export function log(data, member = 'Сервер') {

@@ -1,3 +1,5 @@
+'use strict'
+
 class State {
     constructor() {
         if (State.exists) return State.instance

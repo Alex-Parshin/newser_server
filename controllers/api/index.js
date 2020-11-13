@@ -1,5 +1,6 @@
-import express from 'express'
+'use strict'
 
+import express from 'express'
 import { getMercurySelectors, sendMercurySelectors } from './../postgres'
 import { getData, sendData } from './../rabbitmq'
 import { getQuery } from './../query'

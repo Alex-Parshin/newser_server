@@ -1,3 +1,5 @@
+'use strict'
+
 import store from './../../state'
 import socket from 'socket.io'
 import { log } from './../../logger'

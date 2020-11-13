@@ -1,3 +1,5 @@
+'use strict'
+
 import * as amqp from 'amqplib/callback_api'
 import { log } from './../../logger'
 import _ from 'underscore'

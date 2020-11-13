@@ -1,3 +1,5 @@
+'use strict'
+
 import pgPromise from 'pg-promise';
 import store from './../../state'
 import { log } from './../../logger'
