@@ -21,6 +21,16 @@ export default function socketManager() {
 
             io.emit('update_clients', clients)
             log(`${new_name} подключился!`)
+
+            if (new_name.split('_')[0] === 'puppeteer' || new_name.split('_')[0] === 'mercury') {
+                const memberSocket = getMemberViaName(new_name).socket;
+                memberSocket.emit('start', {
+                    source: 'server',
+                    pages: 1,
+                    url: process.env.QUERY_URL,
+                    engines: { 3: true, 4: true, 7: true }
+                });
+            }
         })
 
         socket.on('log', ({ text, status }) => {
